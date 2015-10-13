@@ -1,0 +1,10 @@
+spring:
+  profiles.active: dev
+---
+spring:
+  profiles: dev
+server:
+  protocol: http
+  host: localhost
+  port: 8080
+  appname: FoReServer
