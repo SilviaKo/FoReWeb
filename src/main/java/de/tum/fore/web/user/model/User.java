@@ -1,8 +1,7 @@
-package de.tum.fore.web.domain.usermanagement;
+package de.tum.fore.web.user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import de.tum.fore.web.commons.UserId;
 import lombok.Data;
 
 @Data

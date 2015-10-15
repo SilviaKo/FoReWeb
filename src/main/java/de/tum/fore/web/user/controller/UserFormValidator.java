@@ -1,11 +1,11 @@
-package de.tum.fore.web.application.controller.usermanagement;
+package de.tum.fore.web.user.controller;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import de.tum.fore.web.application.model.usermanagement.UserForm;
+import de.tum.fore.web.user.model.UserForm;
 
 @Component
 public class UserFormValidator implements Validator {

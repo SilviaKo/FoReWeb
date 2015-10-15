@@ -1,4 +1,4 @@
-package de.tum.fore.web.domain.usermanagement;
+package de.tum.fore.web.user.model;
 
 public enum Religion {
 

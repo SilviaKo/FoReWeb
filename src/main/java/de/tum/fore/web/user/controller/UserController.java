@@ -1,4 +1,4 @@
-package de.tum.fore.web.application.controller.usermanagement;
+package de.tum.fore.web.user.controller;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import de.tum.fore.web.application.model.usermanagement.UserForm;
-import de.tum.fore.web.domain.usermanagement.Disease;
-import de.tum.fore.web.domain.usermanagement.Religion;
-import de.tum.fore.web.domain.usermanagement.User;
+import de.tum.fore.web.user.model.Disease;
+import de.tum.fore.web.user.model.Religion;
+import de.tum.fore.web.user.model.User;
+import de.tum.fore.web.user.model.UserForm;
 
 @Controller
 @RequestMapping(value="/user")

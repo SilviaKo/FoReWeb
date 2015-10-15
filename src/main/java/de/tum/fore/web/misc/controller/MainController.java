@@ -1,4 +1,4 @@
-package de.tum.fore.web.application.controller.misc;
+package de.tum.fore.web.misc.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

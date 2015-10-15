@@ -1,15 +1,10 @@
-package de.tum.fore.web.application.model.usermanagement;
+package de.tum.fore.web.user.model;
 
 import java.util.Calendar;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import de.tum.fore.web.domain.usermanagement.Disease;
-import de.tum.fore.web.domain.usermanagement.ExtendedUserProfile;
-import de.tum.fore.web.domain.usermanagement.Religion;
-import de.tum.fore.web.domain.usermanagement.Sex;
-import de.tum.fore.web.domain.usermanagement.User;
 import lombok.Data;
 
 @Data

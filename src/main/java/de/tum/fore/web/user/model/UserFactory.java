@@ -1,10 +1,8 @@
-package de.tum.fore.web.domain.usermanagement;
+package de.tum.fore.web.user.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import de.tum.fore.web.commons.UserId;
 
 public class UserFactory {
 

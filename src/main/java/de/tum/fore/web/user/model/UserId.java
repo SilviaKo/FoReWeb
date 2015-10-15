@@ -1,4 +1,4 @@
-package de.tum.fore.web.commons;
+package de.tum.fore.web.user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

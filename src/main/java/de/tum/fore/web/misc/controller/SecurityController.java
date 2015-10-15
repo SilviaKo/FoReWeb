@@ -1,4 +1,4 @@
-package de.tum.fore.web.application.controller.misc;
+package de.tum.fore.web.misc.controller;
 
 import java.util.Arrays;
 
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import de.tum.fore.web.domain.usermanagement.User;
+import de.tum.fore.web.user.model.User;
 
 @Controller
 public class SecurityController {

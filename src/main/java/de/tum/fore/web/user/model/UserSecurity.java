@@ -1,4 +1,4 @@
-package de.tum.fore.web.domain.usermanagement;
+package de.tum.fore.web.user.model;
 
 import java.util.ArrayList;
 import java.util.List;
