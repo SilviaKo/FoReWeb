@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -20,6 +21,9 @@ public class SecurityController {
 
 	@Autowired
 	private OAuth2ClientContext oAuth2ClientContext;
+	
+	@Autowired
+	private OAuth2RestTemplate template;
 	
 	@RequestMapping(path="/login", method=RequestMethod.GET)
 	public String login() {
@@ -45,6 +49,32 @@ public class SecurityController {
 		
 		User user = template.getForObject("http://localhost:8080/FoReServer/api/rest/usermanagement/findMe", User.class);
 		session.setAttribute("user", user);
+		
+		if(user.getUserProfile().getBirthday() == null ||
+			user.getUserProfile().getSex() == null ||
+			user.getUserProfile().getReligion() == null ||
+			user.getUserProfile().getHeight() == 0 ||
+			user.getUserProfile().getWeight() == 0 ||
+			user.getUserProfile().getHipmeasurement() == 0 ||
+			user.getUserProfile().getWaistmeasurement() == 0 ||
+			user.getUserProfile().getDiseases() == null) {
+			
+			return "redirect:/user/edit";
+			
+		}
+		
+		return "redirect:/";
+		
+	}
+	
+	@RequestMapping(path="/logout")
+	public String logout(HttpSession session) {
+		
+		
+		template.getForObject("http://localhost:8080/FoReServer/oauth/revoke-token", HttpStatus.class);
+		
+		session.invalidate();
+		
 		
 		return "redirect:/";
 		

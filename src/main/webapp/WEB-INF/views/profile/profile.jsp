@@ -69,7 +69,7 @@
 		  					</tr>
 			  				<tr>
 			  					<td><strong>Taillenumfang:</strong></td>
-			  					<td>${user.userProfile.weistmeasurement} cm</td>
+			  					<td>${user.userProfile.waistmeasurement} cm</td>
 			  				</tr>
 		  				</table>
 					</div>

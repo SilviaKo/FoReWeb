@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import de.tum.fore.web.user.model.Disease;
+import de.tum.fore.web.user.model.PasswordForm;
 import de.tum.fore.web.user.model.Religion;
 import de.tum.fore.web.user.model.User;
 import de.tum.fore.web.user.model.UserForm;
@@ -38,20 +39,24 @@ public class UserController {
 	@Autowired
 	private UserFormValidator userFormValidatior;
 	
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
+	@Autowired
+	private PasswordFormValidator passwordFormValidator;
+	
+	@InitBinder("userForm")
+	protected void initBinderUserForm(WebDataBinder binder) {
 		binder.addValidators(userFormValidatior);
+	}
+	
+	@InitBinder("passwordForm")
+	protected void initBinderPasswordForm(WebDataBinder binder) {
+		binder.addValidators(passwordFormValidator);
 	}
 	
 	@RequestMapping(value="/profile", method=RequestMethod.GET)
 	public String viewProfile(ModelMap models, HttpSession session) {
 		
+		session.setAttribute("user", template.getForObject(serverUrl + "api/rest/usermanagement/findMe", User.class));
 
-		
-		
-			session.setAttribute("user", template.getForObject(serverUrl + "api/rest/usermanagement/findMe", User.class));
-
-		
 		return "usermanagement/profile";
 		
 	}
@@ -112,6 +117,39 @@ public class UserController {
 		template.postForObject(serverUrl + "api/rest/usermanagement/updateMe", user, HttpStatus.class);
 		
 		return "redirect:/user/profile";
+	}
+	
+	@RequestMapping(value="/changePassword", method=RequestMethod.GET)
+	public String changePasswordGet(ModelMap modelMap) {
+		
+		modelMap.addAttribute("passwordForm", new PasswordForm());
+		
+		return "usermanagement/changePassword";
+
+	}
+	
+	@RequestMapping(value="/changePassword", method=RequestMethod.POST)
+	public String changePasswordGet(@ModelAttribute @Validated PasswordForm passwordForm, BindingResult result, ModelMap modelMap) {
+		
+		if(result.hasErrors()) {
+			
+			return "usermanagement/changePassword";
+			
+		}
+		
+		HttpStatus response = template.getForObject(serverUrl + "api/rest/usermanagement/changePassword/" + passwordForm.getOldPassword() + "/" + passwordForm.getNewPassword(), HttpStatus.class);
+		
+		if(response == HttpStatus.BAD_REQUEST) {
+			
+			result.rejectValue("oldPassword", null, "Altes Password falsch!");
+			
+			return "usermanagement/changePassword";
+			
+		}
+		
+		
+		return "redirect:/user/profile";
+		
 	}
 	
 }

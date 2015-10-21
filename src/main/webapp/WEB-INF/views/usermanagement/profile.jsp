@@ -76,7 +76,7 @@
 		  					</tr>
 			  				<tr>
 			  					<td><strong>Taillenumfang:</strong></td>
-			  					<td>${user.userProfile.weistmeasurement} cm</td>
+			  					<td>${user.userProfile.waistmeasurement} cm</td>
 			  				</tr>
 		  				</table>
 					</div>
@@ -224,6 +224,7 @@
 			</div>
 	
 			<a href="user/edit/" class="btn btn-primary">Profil bearbeiten</a>
+			<a href="user/changePassword/" class="btn btn-primary">Passwort ändern</a>
 	      
 			<t:footer />
 		

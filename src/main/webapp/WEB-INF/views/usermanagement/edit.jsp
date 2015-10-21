@@ -59,38 +59,44 @@
 							</div>
 						</spring:bind>
 						
-						<spring:bind path="birthdayDay">
-							<div class="form-group ${status.error ? 'has-error' : ''}">
-								<label class="col-sm-2 control-label">Geburtstag</label>
-								<div class="col-sm-2">
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Geburtstag</label>
+							<spring:bind path="birthdayDay">
+								<div class="col-sm-2 ${status.error ? 'has-error' : ''}">
 									<form:select path="birthdayDay" class="form-control" id="birthdayDay">
-										<form:option value="0">Tag</form:option>
+										<form:option value="-1">Tag</form:option>
 										<c:forEach begin="1" end="31" step="1" var="day">
 											<form:option value="${day}">${day}</form:option>
 										</c:forEach>
 									</form:select>
 									<form:errors path="birthdayDay" class="control-label" />
 								</div>
-								<div class="col-sm-2">
+							</spring:bind>
+							<spring:bind path="birthdayMonth">
+								<div class="col-sm-2 ${status.error ? 'has-error' : ''}">
 									<form:select path="birthdayMonth" class="form-control" id="birthdayMonth">
-										<form:option value="0">Monat</form:option>
+										<form:option value="-1">Monat</form:option>
 										<c:forEach begin="1" end="12" step="1" var="month">
 											<form:option value="${month}">${month}</form:option>
 										</c:forEach>
 									</form:select>
 									<form:errors path="birthdayMonth" class="control-label" />
 								</div>
-								<div class="col-sm-2">
+							</spring:bind>
+							<spring:bind path="birthdayYear">
+								<div class="col-sm-2 ${status.error ? 'has-error' : ''}">
 									<form:select path="birthdayYear" class="form-control" id="birthdayYear">
-										<form:option value="0">Jahr</form:option>
+										<form:option value="-1">Jahr</form:option>
 										<c:forEach begin="1900" end="2015" step="1" var="year">
 											<form:option value="${year}">${year}</form:option>
 										</c:forEach>
 									</form:select>
 									<form:errors path="birthdayYear" class="control-label" />
 								</div>
-							</div>
-						</spring:bind>
+							</spring:bind>
+						</div>
+							
 						
 						<spring:bind path="sex">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
@@ -165,15 +171,15 @@
 							</div>
 						</spring:bind>
 						
-						<spring:bind path="weistmeasurement">
+						<spring:bind path="waistmeasurement">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
 								<label class="col-sm-2 control-label">Taillenumfang</label>
 								<div class="col-sm-10">
 									<div class="input-group">
-										<form:input path="weistmeasurement" type="number" class="form-control" id="weistmeasurement" />
+										<form:input path="waistmeasurement" type="number" class="form-control" id="waistmeasurement" />
 										<span class="input-group-addon">cm</span>
 									</div>
-									<form:errors path="weistmeasurement" class="control-label" />
+									<form:errors path="waistmeasurement" class="control-label" />
 								</div>
 							</div>
 						</spring:bind>

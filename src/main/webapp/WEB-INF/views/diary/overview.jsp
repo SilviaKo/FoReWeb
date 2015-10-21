@@ -1,6 +1,8 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
 
 <t:template>
@@ -29,10 +31,21 @@
       		<br />
       		
       		<div class="row">
-      			<form action="user/diary/search" method="POST">
-					<div class="col-md-10"><input name="searchQuery" class="form-control" value="<c:if test="${not empty searchQuery}">${searchQuery}</c:if>"></div>
-					<div class="col-md-2"><button type="submit" class="btn btn-primary" style="width: 100%;">Suchen</button></div>
-				</form>
+      			<form:form modelAttribute="searchForm" action="user/diary/search" method="POST">
+					<div class="col-md-8">
+						<spring:bind path="searchExpression">
+							<div class="${status.error ? 'has-error' : ''}">
+								<form:input path="searchExpression" name="searchExpression" class="form-control" />
+							</div>
+						</spring:bind>
+					</div>
+					<div class="col-md-2">
+						<button type="submit" class="btn btn-primary" style="width: 100%;">Suchen</button>
+					</div>
+					<div class="col-md-2">
+						<a href="user/diary/" class="btn btn-danger" style="width: 100%;">Abbrechen</a>
+					</div>
+				</form:form>
 			</div>
 			
 			<br />
@@ -71,7 +84,7 @@
 		  		<c:if test="${entries['Breakfast'] == null}">
 	  				<div class="panel-body text-center">
 	  					Keine Einträge.
-	  				</div>>
+	  				</div>
 	  			</c:if>
 	  		
 	  			<c:if test="${entries['Breakfast'] != null}">
@@ -83,11 +96,24 @@
 				  			<th>
 				  				Lebensmittel
 				  			</th>
+				  			<th>
+				  				Optionen
+				  			</th>
 			  			</tr>
 			  			<c:forEach items="${entries['Breakfast']}" var="entry">
 				  			<tr>
-				  				<td>${entry.quantity} g</td>
-				  				<td>${entry.description}</td>
+				  				<td>${entry.value.quantity} g</td>
+				  				<td>${entry.value.name} (id: ${entry.key})</td>
+				  				<td>
+				  					<form action="user/diary/delete" method="POST">
+										<input type="hidden" name="date" value="<fmt:formatDate value="${date}" pattern="yyyy-MM-dd" />" />
+										<input type="hidden" name="meal" value="Breakfast" />
+										<input type="hidden" name="id" value="${entry.key}" />
+										<button type="submit" class="btn btn-sm btn-danger" style="width: 100%;">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
+									</form>
+				  				</td>
 				  			</tr>
 				  		</c:forEach>
 				  	</table>
@@ -117,8 +143,8 @@
 			  			</tr>
 			  			<c:forEach items="${entries['Lunch']}" var="entry">
 				  			<tr>
-				  				<td>${entry.quantity} g</td>
-				  				<td>${entry.description}</td>
+				  				<td>${entry.value.quantity} g</td>
+				  				<td>${entry.value.name} (id: ${entry.key})</td>
 				  			</tr>
 				  		</c:forEach>
 				  	</table>
@@ -148,8 +174,8 @@
 			  			</tr>
 			  			<c:forEach items="${entries['Dinner']}" var="entry">
 				  			<tr>
-				  				<td>${entry.quantity} g</td>
-				  				<td>${entry.description}</td>
+				  				<td>${entry.value.quantity} g</td>
+				  				<td>${entry.value.name} (id: ${entry.key})</td>
 				  			</tr>
 				  		</c:forEach>
 				  	</table>

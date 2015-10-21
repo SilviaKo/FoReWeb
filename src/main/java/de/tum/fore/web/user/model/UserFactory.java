@@ -15,7 +15,7 @@ public class UserFactory {
 			double height,
 			double weight,
 			double hipmeasurement,
-			double weistmeasurement,
+			double waistmeasurement,
 			List<Disease> diseases,
 			double personalActivityLevel) {
 		
@@ -28,7 +28,7 @@ public class UserFactory {
 		userProfile.setHeight(height);
 		userProfile.setWeight(weight);
 		userProfile.setHipmeasurement(hipmeasurement);
-		userProfile.setWeistmeasurement(weistmeasurement);
+		userProfile.setWaistmeasurement(waistmeasurement);
 		userProfile.setDiseases(diseases);
 		userProfile.setPersonalActivityLevel(personalActivityLevel);
 		
@@ -91,7 +91,7 @@ public class UserFactory {
 			double height,
 			double weight,
 			double hipmeasurement,
-			double weistmeasurement,
+			double waistmeasurement,
 			List<Disease> diseases,
 			double personalActivityLevel,
 			double totalCholesterol,
@@ -110,7 +110,7 @@ public class UserFactory {
 		userProfile.setHeight(height);
 		userProfile.setWeight(weight);
 		userProfile.setHipmeasurement(hipmeasurement);
-		userProfile.setWeistmeasurement(weistmeasurement);
+		userProfile.setWaistmeasurement(waistmeasurement);
 		userProfile.setDiseases(diseases);
 		userProfile.setPersonalActivityLevel(personalActivityLevel);
 		

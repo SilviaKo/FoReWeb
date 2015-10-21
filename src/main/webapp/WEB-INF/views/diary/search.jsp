@@ -31,17 +31,29 @@
       		<br />
       		
       		<div class="row">
-      			<form action="user/diary/search" method="POST">
-					<div class="col-md-8"><input name="searchQuery" class="form-control" value="<c:if test="${not empty searchQuery}">${searchQuery}</c:if>"></div>
-					<div class="col-md-2"><button type="submit" class="btn btn-primary" style="width: 100%;">Suchen</button></div>
-					<div class="col-md-2"><a href="user/diary/" class="btn btn-danger" style="width: 100%;">Abbrechen</a></div>
-				</form>
+      			<form:form modelAttribute="searchForm" action="user/diary/search" method="POST">
+					<div class="col-md-8">
+						<spring:bind path="searchExpression">
+							<div class="${status.error ? 'has-error' : ''}">
+								<form:input path="searchExpression" name="searchExpression" class="form-control" />
+								<br />
+								<form:errors path="searchExpression" class="control-label" />
+							</div>
+						</spring:bind>
+					</div>
+					<div class="col-md-2">
+						<button type="submit" class="btn btn-primary" style="width: 100%;">Suchen</button>
+					</div>
+					<div class="col-md-2">
+						<a href="user/diary/" class="btn btn-danger" style="width: 100%;">Abbrechen</a>
+					</div>
+				</form:form>
 			</div>
 			
 			<br />
 			<br />
       		
-      		<c:if test="${not empty searchQuery and empty diaryEntries}">
+      		<c:if test="${not empty searchForm.searchExpression and empty diaryEntries}">
       			
       			<div class="row">
 	      		
@@ -76,7 +88,7 @@
 					  		<table class="table">
 					  			<tr>
 					  			<th>
-					  				Bezeichnung
+					  				Bezeichnung ${entry.servings}
 					  			</th>
 					  			<th>
 					  				Aktion
@@ -84,26 +96,22 @@
 					  			</tr>
 					  			<c:forEach items="${diaryEntries}" var="entry">
 						  			<tr>
-						  				<td>${entry.description}</td>
+						  				<td>${entry.name}</td>
 						  				<td>
-						  					<form:form action="user/diary/add" method="POST" modelAttribute="foodItem">
+						  				
+						  					<form action="user/diary/add" method="POST">
 						  						
-						  						<spring:bind path="foodId">
+						  						
 						  							<input type="hidden" name="foodId" value="${entry.foodId}" />
-						  						</spring:bind>
 						  						
-						  						<spring:bind path="dataSource">
 						  							<input type="hidden" name="dataSource" value="${entry.dataSource}" />
-						  						</spring:bind>
 						  						
-						  						<spring:bind path="description">
-						  							<input type="hidden" name="description" value="${entry.description}" />
-						  						</spring:bind>
 						  						
 						  						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						  						
 						  						<button type="submit" class="btn btn-sm btn-success glyphicon glyphicon-plus" style="width: 100%;" ></button>
-						  					</form:form>
+						  					</form>
+						  					
 						  				
 						  				</td>
 						  			</tr>

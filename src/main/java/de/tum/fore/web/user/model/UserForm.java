@@ -24,7 +24,7 @@ public class UserForm {
 	private double height;
 	private double weight;
 	private double hipmeasurement;
-	private double weistmeasurement;
+	private double waistmeasurement;
 	private List<Disease> diseases;
 	private double personalActivityLevel;
 	
@@ -65,7 +65,7 @@ public class UserForm {
 		this.setHeight(user.getUserProfile().getHeight());
 		this.setWeight(user.getUserProfile().getWeight());
 		this.setHipmeasurement(user.getUserProfile().getHipmeasurement());
-		this.setWeistmeasurement(user.getUserProfile().getWeistmeasurement());
+		this.setWaistmeasurement(user.getUserProfile().getWaistmeasurement());
 		this.setDiseases(user.getUserProfile().getDiseases());
 		this.setPersonalActivityLevel(user.getUserProfile().getPersonalActivityLevel());
 		
@@ -96,7 +96,7 @@ public class UserForm {
 		user.getUserProfile().setHeight(this.height);
 		user.getUserProfile().setWeight(this.weight);
 		user.getUserProfile().setHipmeasurement(this.hipmeasurement);
-		user.getUserProfile().setWeistmeasurement(this.weistmeasurement);
+		user.getUserProfile().setWaistmeasurement(this.waistmeasurement);
 		user.getUserProfile().setDiseases(this.diseases);
 		user.getUserProfile().setPersonalActivityLevel(this.personalActivityLevel);
 		

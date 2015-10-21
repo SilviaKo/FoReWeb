@@ -19,7 +19,7 @@ public class UserProfile {
 	private double height;
 	private double weight;
 	private double hipmeasurement;
-	private double weistmeasurement;
+	private double waistmeasurement;
 	private List<Disease> diseases;
 	private double personalActivityLevel;
 	

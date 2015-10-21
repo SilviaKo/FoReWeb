@@ -38,7 +38,7 @@
       		
       			<div class="col-md-12">
       				
-      				<form:form action="user/diary/save" modelAttribute="detailedFoodItem" class="form-horizontal">
+      				<form:form action="user/diary/save" modelAttribute="entry" class="form-horizontal">
       					
       					<spring:bind path="foodId">
       						<form:hidden path="foodId" />
@@ -48,11 +48,11 @@
       						<form:hidden path="dataSource"/>
       					</spring:bind>
       				
-      					<spring:bind path="description">
+      					<spring:bind path="name">
 	      					<div class="form-group">
-			    				<label class="col-md-2 control-label" for="description">Beschreibung</label>
+			    				<label class="col-md-2 control-label" for="name">Beschreibung</label>
 			    				<div class="col-md-10">
-			      					<form:input path="description" type="text" class="form-control" id="description" readonly="true" />
+			      					<form:input path="name" type="text" class="form-control" id="description" readonly="true" />
 			      				</div>
 	  						</div>
   						</spring:bind>
@@ -76,23 +76,55 @@
 			    				<label class="col-md-2 control-label" for="dish">Mahlzeit</label>
 			    				<div class="col-md-10">
 			    					<form:select path="meal" class="form-control" id="dish">
+			    						<form:option value="-1" label="- - Bitte wählen - -"/>
 			    						<form:options items="${meals}" /> 
 			    					</form:select>
 			      				</div>
 	  						</div>		
   						</spring:bind>
   						
-  						<spring:bind path="quantity">
-	  						<div class="form-group">
-			    				<label class="col-md-2 control-label" for="quantity">Menge</label>
-			    				<div class="col-md-10">
-									<div class="input-group">
-										<form:input path="quantity" type="number" class="form-control" id="quantity" />
-										<span class="input-group-addon">g</span>
-									</div>
-			      				</div>
-	  						</div>
-	  					</spring:bind>
+  						<c:if test="${not empty servings}">
+  						
+	  						<spring:bind path="quantity">
+		  						<div class="form-group">
+				    				<label class="col-md-2 control-label" for="quantity">Menge</label>
+				    				<div class="col-md-4">
+				    					<form:select path="quantity" class="form-control">
+				    						<form:option value="-1" label="- - Bitte wählen - -"/>
+				    						<c:forEach items="${servings}" var="serving">
+				    							<form:option value="${serving.weight}" label="${serving.name} (${serving.weight} g)" />
+				    						</c:forEach> 
+				    					</form:select>
+				      				</div>
+				      				<div class="col-md-2 text-center">
+				    					oder
+				      				</div>
+				    				<div class="col-md-4">
+										<div class="input-group">
+											<form:input path="quantity" type="number" class="form-control" id="quantity" />
+											<span class="input-group-addon">g</span>
+										</div>
+				      				</div>
+		  						</div>
+		  					</spring:bind>
+	  					
+	  					</c:if>
+	  					
+	  					<c:if test="${empty servings}">
+	  					
+	  						<spring:bind path="quantity">
+		  						<div class="form-group">
+				    				<label class="col-md-2 control-label" for="quantity">Menge</label>
+				    				<div class="col-md-10">
+										<div class="input-group">
+											<form:input path="quantity" type="number" class="form-control" id="quantity" />
+											<span class="input-group-addon">g</span>
+										</div>
+				      				</div>
+		  						</div>
+		  					</spring:bind>
+	  					
+	  					</c:if>
       					
       					<div class="pull-right">
 	      					<button type="submit" class="btn btn-primary">Speichern</button>

@@ -12,13 +12,6 @@ import org.springframework.core.io.ClassPathResource;
 @Configuration
 @ComponentScan({"de.tum.fore.web.config"})
 public class RootConfig {
-
-//	@Bean
-//	public PropertySource<?> yamlPropertySourceLoader() throws IOException {
-//		YamlPropertySourceLoader loader = new YamlPropertySourceLoader();
-//		PropertySource<?> applicationYamlPropertySource = loader.load("application.yml", new ClassPathResource("application.yml"), "dev");
-//		return applicationYamlPropertySource;
-//	}
 	
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer properties() {
