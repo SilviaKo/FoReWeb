@@ -47,7 +47,7 @@ public class DiaryController {
 		LocalDate date = LocalDate.now();
 		LocalDate yesterday = date.minusDays(1);
 		
-		String url = serverUrl + "api/rest/diary/find/entriesByDate/" + date;
+		String url = serverUrl + "api/rest/diary/find/" + date;
 		
 		Map<String, TreeMap<Integer, ApiDiaryEntry>> entries = template.getForObject(url, Map.class);
 		
@@ -78,7 +78,7 @@ public class DiaryController {
 			
 		}
 		
-		String url = serverUrl + "api/rest/diary/find/entriesByDate/" + date;
+		String url = serverUrl + "api/rest/diary/find/" + date;
 		
 		Map<String, TreeMap<Integer, ApiDiaryEntry>> entries = template.getForObject(url, Map.class);
 		
@@ -123,7 +123,7 @@ public class DiaryController {
 	@RequestMapping(path="add", method=RequestMethod.POST)
 	public String add(@RequestParam String foodId, @RequestParam String dataSource, ModelMap modelMap) {
 		
-		String url = serverUrl + "api/rest/dataSource/findFrom/" + dataSource + "/entryByFoodId/" + foodId;
+		String url = serverUrl + "api/rest/dataSource/find/" + dataSource + "/" + foodId;
 		
 		ApiFood foodItem = template.getForObject(url, ApiFood.class);
 		
@@ -156,7 +156,7 @@ public class DiaryController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 		entry.setDate(LocalDate.parse(entry.getDate(), formatter).toString());
 		
-		String url = serverUrl + "api/rest/diary/addEntry";
+		String url = serverUrl + "api/rest/diary/add";
 		template.postForObject(url, entry, HttpStatus.class);
 		
 		return "redirect:/user/diary/";

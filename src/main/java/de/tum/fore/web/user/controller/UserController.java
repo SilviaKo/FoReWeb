@@ -57,7 +57,7 @@ public class UserController {
 		
 		session.setAttribute("user", template.getForObject(serverUrl + "api/rest/usermanagement/findMe", User.class));
 
-		return "usermanagement/profile";
+		return "user/profile";
 		
 	}
 	
@@ -82,7 +82,7 @@ public class UserController {
 		
 		modelMap.addAttribute("userForm", new UserForm(user));
 		
-		return "usermanagement/edit";
+		return "user/edit";
 		
 	}
 	
@@ -105,7 +105,7 @@ public class UserController {
 			modelMap.addAttribute("diseasesMap", diseasesMap);
 			modelMap.addAttribute("religionMap", religionMap);
 			
-			return "usermanagement/edit";
+			return "user/edit";
 		}
 		
 		User user = template.getForObject(serverUrl + "api/rest/usermanagement/findMe", User.class);
@@ -124,7 +124,7 @@ public class UserController {
 		
 		modelMap.addAttribute("passwordForm", new PasswordForm());
 		
-		return "usermanagement/changePassword";
+		return "user/changePassword";
 
 	}
 	
@@ -133,7 +133,7 @@ public class UserController {
 		
 		if(result.hasErrors()) {
 			
-			return "usermanagement/changePassword";
+			return "user/changePassword";
 			
 		}
 		
@@ -143,7 +143,7 @@ public class UserController {
 			
 			result.rejectValue("oldPassword", null, "Altes Password falsch!");
 			
-			return "usermanagement/changePassword";
+			return "user/changePassword";
 			
 		}
 		
