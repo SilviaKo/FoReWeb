@@ -1,0 +1,68 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+
+compileJava.options.encoding = 'UTF-8'
+
+def webapps = "/opt/tomcat/8.0.24/webapps/"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+	// Logging
+
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'org.slf4j:slf4j-log4j12:1.7.12'
+    
+    // Spring
+    
+    compile 'org.springframework:spring-webmvc:4.2.1.RELEASE'
+    compile 'org.springframework:spring-test:4.2.1.RELEASE'
+    compile 'org.springframework.security.oauth:spring-security-oauth2:2.0.7.RELEASE'
+    compile 'org.springframework.security:spring-security-taglibs:3.2.6.RELEASE'
+	compile 'org.springframework.boot:spring-boot-starter-web:1.2.6.RELEASE'
+        
+    // Sevlet
+    
+    compile 'javax.servlet:javax.servlet-api:3.1.0'
+    compile 'javax.servlet.jsp:jsp-api:2.2'
+	compile 'javax.servlet:jstl:1.2'
+    
+    // Misc
+    
+    compile 'org.apache.httpcomponents:httpclient:4.5'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.3'
+    compile "org.projectlombok:lombok:1.16.6"
+    compile 'org.hibernate:hibernate-validator:5.2.2.Final'
+    compile 'net.sargue:java-time-jsptags:1.0.0'
+    
+    compile project(':FoReApi')
+    
+    testCompile 'junit:junit:4.12'
+}
+
+task copyToServer(type: Copy) {
+
+	from war
+	into webapps
+
+}
+
+task cleanServer (type: Delete) {
+	
+	delete webapps + rootProject.name + "-" + version + ".war"
+	delete webapps + rootProject.name + "-" + version
+	
+}
+
+task deployToServer(dependsOn: ['cleanServer', 'copyToServer']){}
+
+copyToServer.mustRunAfter clean

@@ -17,6 +17,7 @@ public class EntryForm {
 	private String date;
 	@NotEmpty
 	private String meal;
-	private double quantity;
+	private double quantityServing;
+	private double quantityManual;
 	
 }

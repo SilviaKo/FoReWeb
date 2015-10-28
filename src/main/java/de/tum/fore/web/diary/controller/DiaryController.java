@@ -1,14 +1,11 @@
 package de.tum.fore.web.diary.controller;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -20,6 +17,9 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import de.tum.fore.api.model.datasource.ApiFood;
+import de.tum.fore.api.model.diary.ApiDiary;
 import de.tum.fore.api.model.diary.ApiDiaryEntry;
+import de.tum.fore.web.diary.model.EntryForm;
 import de.tum.fore.web.diary.model.SearchForm;
 
 @Controller
@@ -44,20 +46,16 @@ public class DiaryController {
 	@RequestMapping(path="/")
 	public String overview(ModelMap modelMap) {
 		
-		LocalDate date = LocalDate.now();
-		LocalDate yesterday = date.minusDays(1);
+		return "forward:/user/diary/" + LocalDate.now();
 		
-		String url = serverUrl + "api/rest/diary/find/" + date;
-		
-		Map<String, TreeMap<Integer, ApiDiaryEntry>> entries = template.getForObject(url, Map.class);
-		
-		modelMap.addAttribute("searchForm", new SearchForm());
-		modelMap.addAttribute("entries", entries);
-		modelMap.addAttribute("date", Date.from((date.atStartOfDay().atZone(ZoneId.systemDefault())).toInstant()));
-		modelMap.addAttribute("yesterday", Date.from((yesterday.atStartOfDay().atZone(ZoneId.systemDefault())).toInstant()));
-		
-		return "diary/overview";
-		
+	}
+	
+	@Autowired
+	private EntryValidator entryValidator;
+	
+	@InitBinder("entryForm")
+	protected void initBinderEntryForm(WebDataBinder binder) {
+		binder.addValidators(entryValidator);
 	}
 	
 	@RequestMapping(path="/{dateString}")
@@ -66,26 +64,25 @@ public class DiaryController {
 		modelMap.addAttribute("searchForm", new SearchForm());
 		
 		LocalDate date = LocalDate.parse(dateString);
-		modelMap.addAttribute("date", Date.from((date.atStartOfDay().atZone(ZoneId.systemDefault())).toInstant()));
+		modelMap.addAttribute("date", date);
 		
-		LocalDate yesterday = date.minusDays(1);
-		modelMap.addAttribute("yesterday", Date.from((yesterday.atStartOfDay().atZone(ZoneId.systemDefault())).toInstant()));
+		String url = serverUrl + "api/rest/diary/find/" + date;
+		ApiDiary diary = template.getForObject(url, ApiDiary.class);
+		modelMap.addAttribute("diary", diary);
 		
-		if(date.compareTo(LocalDate.now()) < 0) {
-			
-			LocalDate tomorrow = date.plusDays(1); 
-			modelMap.addAttribute("tomorrow", Date.from((tomorrow.atStartOfDay().atZone(ZoneId.systemDefault())).toInstant()));
+		if(diary.getDateOfFirstEntry() != null && diary.getDateOfFirstEntry().isBefore(date)) {
+		
+			modelMap.addAttribute("yesterday", date.minusDays(1));
 			
 		}
 		
-		String url = serverUrl + "api/rest/diary/find/" + date;
-		
-		Map<String, TreeMap<Integer, ApiDiaryEntry>> entries = template.getForObject(url, Map.class);
-		
-		modelMap.addAttribute("entries", entries);
+		if(date.isBefore(LocalDate.now())) {
+			
+			modelMap.addAttribute("tomorrow", date.plusDays(1));
+			
+		}
 	
 		return "diary/overview";
-		
 		
 	}
 	
@@ -110,11 +107,11 @@ public class DiaryController {
 		
 		String url = serverUrl + "api/rest/dataSource/search/" + searchForm.getSearchExpression();
 		
-		List<ApiFood> entries = template.getForObject(url, ArrayList.class);
+		List<ApiFood> results = template.getForObject(url, ArrayList.class);
 		
-		modelMap.addAttribute("diaryEntries", entries);
+		modelMap.addAttribute("results", results);
 		modelMap.addAttribute("searchExpression", searchForm.getSearchExpression());
-		modelMap.addAttribute("foodItem", new ApiFood());
+		modelMap.addAttribute("food", new ApiFood());
 		
 		return "diary/search";
 		
@@ -127,12 +124,12 @@ public class DiaryController {
 		
 		ApiFood foodItem = template.getForObject(url, ApiFood.class);
 		
-		ApiDiaryEntry entry = new ApiDiaryEntry();
-		entry.setFoodId(foodItem.getFoodId());
-		entry.setDataSource(foodItem.getDataSource());
-		entry.setName(foodItem.getName());
+		EntryForm form = new EntryForm();
+		form.setFoodId(foodId);
+		form.setDataSource(dataSource);
+		form.setName(foodItem.getName());
 		
-		modelMap.put("entry", entry);
+		modelMap.put("entryForm", form);
 		
 		Map<String, String> meals = new LinkedHashMap<>();
 		meals.put("Breakfast", "Frühstück");
@@ -151,10 +148,40 @@ public class DiaryController {
 	}
 	
 	@RequestMapping(path="save", method=RequestMethod.POST)
-	public String save(@ModelAttribute ApiDiaryEntry entry, ModelMap modelMap) {
+	public String save(@ModelAttribute @Validated EntryForm form, BindingResult result, ModelMap modelMap) {
+		
+		if(result.hasErrors()) {
+			
+			String url = serverUrl + "api/rest/dataSource/find/" + form.getDataSource() + "/" + form.getFoodId();
+			
+			ApiFood foodItem = template.getForObject(url, ApiFood.class);
+			
+			Map<String, String> meals = new LinkedHashMap<>();
+			meals.put("Breakfast", "Frühstück");
+			meals.put("Lunch", "Mittagessen");
+			meals.put("Dinner", "Abendessen");
+			meals.put("Snack", "Snack");
+			meals.put("Drink", "Getränk");
+			meals.put("Other", "Sonstiges");
+			
+			modelMap.put("meals", meals);
+			
+			modelMap.put("servings", foodItem.getServings());
+			
+			return "diary/add";
+			
+		}
+		
+		ApiDiaryEntry entry = new ApiDiaryEntry();
+		entry.setFoodId(form.getFoodId());
+		entry.setDataSource(form.getDataSource());
+		entry.setName(form.getName());
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-		entry.setDate(LocalDate.parse(entry.getDate(), formatter).toString());
+		entry.setDate(LocalDate.parse(form.getDate(), formatter).toString());
+		
+		entry.setMeal(form.getMeal());
+		entry.setQuantity(form.getQuantityServing() != -1 ?  form.getQuantityServing() : form.getQuantityManual());
 		
 		String url = serverUrl + "api/rest/diary/add";
 		template.postForObject(url, entry, HttpStatus.class);
@@ -168,7 +195,7 @@ public class DiaryController {
 		
 		String url = serverUrl + "api/rest/diary/delete/" + date + "/" + meal + "/" + id;
 		
-		HttpStatus foodItem = template.getForObject(url, HttpStatus.class);
+		template.delete(url);
 		
 		return "redirect:/user/diary/";
 		

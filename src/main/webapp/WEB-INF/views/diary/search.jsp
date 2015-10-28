@@ -53,7 +53,7 @@
 			<br />
 			<br />
       		
-      		<c:if test="${not empty searchForm.searchExpression and empty diaryEntries}">
+      		<c:if test="${not empty searchForm.searchExpression and empty results}">
       			
       			<div class="row">
 	      		
@@ -74,7 +74,7 @@
       			
       		</c:if>
       
-      		<c:if test="${not empty diaryEntries}">
+      		<c:if test="${not empty results}">
       
 	      		<div class="row">
 	      		
@@ -90,21 +90,21 @@
 					  			<th>
 					  				Bezeichnung ${entry.servings}
 					  			</th>
-					  			<th>
-					  				Aktion
+					  			<th class="col-md-2">
+					  				Optionen
 					  			</th>
 					  			</tr>
-					  			<c:forEach items="${diaryEntries}" var="entry">
+					  			<c:forEach items="${results}" var="result">
 						  			<tr>
-						  				<td>${entry.name}</td>
+						  				<td>${result.name}</td>
 						  				<td>
 						  				
 						  					<form action="user/diary/add" method="POST">
 						  						
 						  						
-						  							<input type="hidden" name="foodId" value="${entry.foodId}" />
+						  							<input type="hidden" name="foodId" value="${result.foodId}" />
 						  						
-						  							<input type="hidden" name="dataSource" value="${entry.dataSource}" />
+						  							<input type="hidden" name="dataSource" value="${result.dataSource}" />
 						  						
 						  						
 						  						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

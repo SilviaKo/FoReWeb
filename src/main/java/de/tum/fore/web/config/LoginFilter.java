@@ -37,7 +37,7 @@ public class LoginFilter implements Filter {
 				HttpServletResponse res = (HttpServletResponse)response;
 				HttpServletRequest req = (HttpServletRequest)request;
 				
-				log.debug("################################### REDIRECT TO LOGIN!!!!");
+				log.debug("Redirecting to login page.");
 				
 				res.sendRedirect(req.getContextPath() + "/login");
 			
